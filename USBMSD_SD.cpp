@@ -121,6 +121,8 @@
 USBMSD_SD::USBMSD_SD(PinName mosi, PinName miso, PinName sclk, PinName cs) :
    _spi(mosi, miso, sclk), _cs(cs) {
       _cs = 1;
+      //no init
+      _status = 0x01;
       connect();
 }
 
@@ -147,7 +149,7 @@ int USBMSD_SD::initialise_card() {
     // Set to 100kHz for initialisation, and clock card with cs = 1
     _spi.frequency(100000); 
     _cs = 1;
-    for(int i=0; i<16; i++) {   
+    for(int i=0; i<16; i++) {
         _spi.write(0xFF);
     }
 
@@ -210,6 +212,8 @@ int USBMSD_SD::disk_initialize() {
     }
         
     _spi.frequency(5000000); // Set to 5MHz for data transfer
+    // OK
+    _status = 0x00;
     return 0;
 }
 
@@ -235,7 +239,7 @@ int USBMSD_SD::disk_read(char *buffer, int block_number) {
     return 0;
 }
 
-int USBMSD_SD::disk_status() { return 0; }
+int USBMSD_SD::disk_status() { return _status; }
 int USBMSD_SD::disk_sync() { return 0; }
 int USBMSD_SD::disk_sectors() { return _sectors; }
 

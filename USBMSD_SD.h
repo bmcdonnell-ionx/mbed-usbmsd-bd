@@ -76,6 +76,7 @@ protected:
     int _sectors;
     
     int capacity;
+    int _status;
     
     SPI _spi;
     DigitalOut _cs;
