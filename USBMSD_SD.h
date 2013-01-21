@@ -53,12 +53,13 @@ public:
      */
     USBMSD_SD(PinName mosi, PinName miso, PinName sclk, PinName cs);
     virtual int disk_initialize();
-    virtual int disk_write(const char *buffer, int block_number);
-    virtual int disk_read(char *buffer, int block_number);    
     virtual int disk_status();
+    virtual int disk_read(uint8_t * buffer, uint64_t block_number);
+    virtual int disk_write(const uint8_t * buffer, uint64_t block_number);
     virtual int disk_sync();
-    virtual int disk_sectors();
-    virtual int disk_size();
+    virtual uint64_t disk_sectors();
+    
+    virtual uint64_t disk_size(){return _sectors*512;};
 
 protected:
 
@@ -70,16 +71,16 @@ protected:
     int initialise_card_v1();
     int initialise_card_v2();
     
-    int _read(char *buffer, int length);
-    int _write(const char *buffer, int length);
-    int _sd_sectors();
-    int _sectors;
+    int _read(uint8_t * buffer, uint32_t length);
+    int _write(const uint8_t *buffer, uint32_t length);
+    uint64_t _sd_sectors();
+    uint64_t _sectors;
     
-    int capacity;
-    int _status;
+    uint8_t _status;
     
     SPI _spi;
     DigitalOut _cs;
+    int cdv;
 };
 
 #endif
