@@ -222,25 +222,33 @@ int USBMSD_SD::disk_initialize() {
     return 0;
 }
 
-int USBMSD_SD::disk_write(const uint8_t *buffer, uint64_t block_number) {
-    // set write address for single block (CMD24)
-    if (_cmd(24, block_number * cdv) != 0) {
-        return 1;
+int USBMSD_SD::disk_write(const uint8_t* buffer, uint64_t block_number, uint8_t count) {
+    for (uint64_t b = block_number; b < block_number + count; b++) {
+        // set write address for single block (CMD24)
+        if (_cmd(24, b * cdv) != 0) {
+            return 1;
+        }
+        
+        // send the data block
+        _write(buffer, 512);
+        buffer += 512;
     }
     
-    // send the data block
-    _write(buffer, 512);
     return 0;
 }
 
-int USBMSD_SD::disk_read(uint8_t *buffer, uint64_t block_number) {
-    // set read address for single block (CMD17)
-    if (_cmd(17, block_number * cdv) != 0) {
-        return 1;
+int USBMSD_SD::disk_read(uint8_t* buffer, uint64_t block_number, uint8_t count) {
+    for (uint64_t b = block_number; b < block_number + count; b++) {
+        // set read address for single block (CMD17)
+        if (_cmd(17, b * cdv) != 0) {
+            return 1;
+        }
+        
+        // receive the data
+        _read(buffer, 512);
+        buffer += 512;
     }
-    
-    // receive the data
-    _read(buffer, 512);
+
     return 0;
 }
 
