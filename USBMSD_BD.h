@@ -52,7 +52,7 @@ public:
      * @param cs   DigitalOut pin used as SD Card chip select
      * @param name The name used to access the virtual filesystem
      */
-    USBMSD_BD(BlockDevice *bd, bd_size_t ssize);
+    USBMSD_BD(BlockDevice *bd);
     virtual int disk_initialize();
     virtual int disk_status();
     virtual int disk_read(uint8_t * buffer, uint64_t block_number, uint8_t count);

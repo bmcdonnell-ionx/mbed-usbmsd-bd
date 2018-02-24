@@ -119,9 +119,8 @@
 
 #define SD_DBG             0
 
-USBMSD_BD::USBMSD_BD(BlockDevice* bd, bd_size_t ssize) {
+USBMSD_BD::USBMSD_BD(BlockDevice* bd) {
     _bd = bd;
-    _ssize = ssize;
     //no init
     _status = 0x01;
     
@@ -129,6 +128,8 @@ USBMSD_BD::USBMSD_BD(BlockDevice* bd, bd_size_t ssize) {
 }
 
 int USBMSD_BD::disk_initialize() {
+    _bd->init();
+    _ssize = _bd->get_erase_size();
     _sectors = _bd->size() / _ssize;
     
     // OK
@@ -141,7 +142,8 @@ int USBMSD_BD::disk_write(const uint8_t* buff, uint64_t sector, uint8_t count)
 {
     bd_addr_t addr = (bd_addr_t)sector*_ssize;
     bd_size_t size = (bd_size_t)count*_ssize;
-    int err = _bd->program(buff, addr, size);
+    int err = _bd->erase(addr, size);
+    err = _bd->program(buff, addr, size);
     return err;
 }
 
@@ -156,7 +158,7 @@ int USBMSD_BD::disk_read(uint8_t* buff, uint64_t sector, uint8_t count)
 int USBMSD_BD::disk_status() { return _status; }
 int USBMSD_BD::disk_sync() { return 0; }
 uint64_t USBMSD_BD::disk_sectors() { return _sectors; }
-uint64_t USBMSD_BD::disk_size() { return (*_bd).size(); }
+uint64_t USBMSD_BD::disk_size() { return _bd->size(); }
 
 
 // PRIVATE FUNCTIONS
