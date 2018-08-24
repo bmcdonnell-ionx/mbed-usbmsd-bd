@@ -30,13 +30,19 @@
 /** Use the SDcard as mass storage device using the USBMSD class
  *
  * @code
- * #include "mbed.h"
  * #include "USBMSD_BD.h"
+ * #include "SDBlockDevice.h"
+ * #include "mbed.h"
  *
- * USBMSD_BD sd(p5, p6, p7, p8);
+ * SDBlockDevice bd(p5, p6, p7, p8);
+ * USBMSD_BD     usbmsd(&bd);
  *
- * int main() {
- *   while(1);
+ * int main()
+ * {
+ *    usbmsd.disk_initialize();
+ *    usbmsd.connect();
+ *
+ *    while(true) {}
  * }
  *
  * @endcode
@@ -44,13 +50,9 @@
 class USBMSD_BD : public USBMSD {
 public:
 
-    /** Create the File System for accessing an SD Card using SPI
+    /** Create the File System for accessing any block device (e.g. an SD Card using SPI)
      *
-     * @param mosi SPI mosi pin connected to SD Card
-     * @param miso SPI miso pin conencted to SD Card
-     * @param sclk SPI sclk pin connected to SD Card
-     * @param cs   DigitalOut pin used as SD Card chip select
-     * @param name The name used to access the virtual filesystem
+     * @param bd Pointer to the block device
      */
     USBMSD_BD(BlockDevice *bd);
     virtual int disk_initialize();
