@@ -23,9 +23,10 @@
 #ifndef USBMSD_BD_H
 #define USBMSD_BD_H
 
-#include "mbed.h"
 #include "BlockDevice.h"
 #include "USBMSD.h"
+
+#include <cstdint>
 
 /** Use the SDcard as mass storage device using the USBMSD class
  *
@@ -57,18 +58,18 @@ public:
     USBMSD_BD(BlockDevice *bd);
     virtual int disk_initialize();
     virtual int disk_status();
-    virtual int disk_read(uint8_t * buffer, uint64_t block_number, uint8_t count);
-    virtual int disk_write(const uint8_t * buffer, uint64_t block_number, uint8_t count);
+    virtual int disk_read(std::uint8_t * buffer, std::uint64_t block_number, std::uint8_t count);
+    virtual int disk_write(const std::uint8_t * buffer, std::uint64_t block_number, std::uint8_t count);
     virtual int disk_sync();
-    virtual uint64_t disk_sectors();    
-    virtual uint64_t disk_size();
+    virtual std::uint64_t disk_sectors();    
+    virtual std::uint64_t disk_size();
 
 protected:
     
-    uint64_t _sectors;
+    std::uint64_t _sectors;
     bd_size_t _ssize;
     
-    uint8_t _status;
+    std::uint8_t _status;
     
     BlockDevice* _bd;
 };

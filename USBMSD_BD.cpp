@@ -27,6 +27,10 @@
 
 #define SD_DBG             0
 
+using namespace std;
+using namespace mbed;
+
+
 USBMSD_BD::USBMSD_BD(BlockDevice* bd) {
     _bd = bd;
     //no init
