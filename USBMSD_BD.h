@@ -58,10 +58,10 @@ public:
     USBMSD_BD(BlockDevice *bd);
     virtual int disk_initialize();
     virtual int disk_status();
-    virtual int disk_read(std::uint8_t * buffer, std::uint64_t block_number, std::uint8_t count);
+    virtual int disk_read (      std::uint8_t * buffer, std::uint64_t block_number, std::uint8_t count);
     virtual int disk_write(const std::uint8_t * buffer, std::uint64_t block_number, std::uint8_t count);
     virtual int disk_sync();
-    virtual std::uint64_t disk_sectors();    
+    virtual std::uint64_t disk_sectors();
     virtual std::uint64_t disk_size();
 
 protected:
